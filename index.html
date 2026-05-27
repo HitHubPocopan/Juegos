@@ -148,8 +148,18 @@
         <div class="adm-box">
           <div class="adm-box-hdr">
             <span>Catálogo de juegos</span>
-            <button id="adm-add-btn" class="btn-add-game">+ Agregar</button>
+            <div class="adm-hdr-btns">
+              <button id="adm-import-btn" class="btn-import-excel">📥 Excel</button>
+              <button id="adm-add-btn"    class="btn-add-game">+ Agregar</button>
+            </div>
           </div>
+          <!-- Input oculto para seleccionar archivo Excel -->
+          <input
+            id="excel-input"
+            type="file"
+            accept=".xlsx,.xls,.csv"
+            hidden
+          >
           <div id="adm-list"></div>
         </div>
       </div>
@@ -181,22 +191,16 @@
         <textarea id="f-desc" class="form-inp" rows="3" placeholder="Breve descripción…"></textarea>
       </div>
 
-      <div class="form-row">
-        <div class="form-grp">
-          <label class="form-lbl" for="f-price">Precio *</label>
-          <input id="f-price" class="form-inp" type="text" placeholder="$4500">
-        </div>
-        <div class="form-grp">
-          <label class="form-lbl" for="f-age">Edad mín *</label>
-          <select id="f-age" class="form-inp">
-            <option value="">Seleccioná…</option>
-            <option value="3">+3 años</option>
-            <option value="5">+5 años</option>
-            <option value="7">+7 años</option>
-            <option value="10">+10 años</option>
-            <option value="15">+15 años</option>
-          </select>
-        </div>
+      <div class="form-grp">
+        <label class="form-lbl" for="f-age">Edad mínima *</label>
+        <select id="f-age" class="form-inp">
+          <option value="">Seleccioná…</option>
+          <option value="3">+3 años</option>
+          <option value="5">+5 años</option>
+          <option value="7">+7 años</option>
+          <option value="10">+10 años</option>
+          <option value="15">+15 años</option>
+        </select>
       </div>
 
       <div class="form-row">
@@ -236,6 +240,29 @@
   </div>
 
   <!-- ════════════════════════════════════════
+       MODAL: IMPORTAR EXCEL
+  ════════════════════════════════════════ -->
+  <div
+    id="import-modal"
+    class="modal-bg"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="import-modal-h"
+  >
+    <div class="modal-sheet">
+      <h3 class="modal-title" id="import-modal-h">Importar desde Excel</h3>
+      <button id="import-modal-close-btn" class="modal-close" aria-label="Cerrar">✕</button>
+
+      <p id="import-summary" class="import-summary"></p>
+      <div id="import-list" class="import-list"></div>
+
+      <button id="import-confirm-btn" class="btn-sub" style="max-width:none;width:100%;margin-top:8px;">
+        ✅ Importar todos
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
        TOAST
   ════════════════════════════════════════ -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -245,6 +272,8 @@
   ════════════════════════════════════════ -->
   <!-- Supabase JS client (UMD) — debe ir antes de data.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- SheetJS — lectura de Excel (.xlsx / .xls / .csv) -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/router.js"></script>

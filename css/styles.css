@@ -343,7 +343,6 @@ button, input, select, textarea {
 .tag-slow { background: #e8f5e9; color: #388e3c; }
 .tag-fast { background: #fff3e0; color: var(--accent); }
 
-.card-price { font-size: 17px; color: var(--accent); }
 .card-play  { font-size: 20px; color: #ccc; flex-shrink: 0; }
 
 .empty {
@@ -601,6 +600,12 @@ button, input, select, textarea {
 
 .adm-box-hdr span { font-size: 15px; }
 
+.adm-hdr-btns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .btn-add-game {
   display: flex;
   align-items: center;
@@ -617,6 +622,24 @@ button, input, select, textarea {
 }
 
 .btn-add-game:active { background: var(--accent-dk); }
+
+.btn-import-excel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: #fff;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .14s;
+}
+
+.btn-import-excel:active { background: #fff3e0; }
 
 .adm-row {
   display: flex;
@@ -653,8 +676,6 @@ button, input, select, textarea {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.adm-gprice { font-size: 12px; color: var(--accent); }
 
 .adm-acts { display: flex; gap: 8px; flex-shrink: 0; }
 
@@ -880,3 +901,27 @@ select.form-inp {
     max-width: 400px;
   }
 }
+
+/* ── 19. IMPORTAR EXCEL ─────────────────────────────── */
+
+.import-summary {
+  font-size: 14px;
+  color: var(--gray);
+  margin-bottom: 10px;
+}
+
+.import-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.import-item {
+  padding: 9px 14px;
+  font-size: 14px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.import-item:last-child { border-bottom: none; }

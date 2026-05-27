@@ -86,7 +86,6 @@ App.Utils = (function () {
            <span class="tag">🎂 ${game.minAge}+</span>
            ${paceTag}
          </div>
-         <div class="card-price">${esc(game.price)}</div>
        </div>
        <span class="card-play" aria-hidden="true">▶</span>`;
 

@@ -34,31 +34,31 @@ App.Data = (function () {
     {
       id: 'catan', name: 'Catan',
       description: 'Construí carreteras, asentamientos y ciudades en la isla de Catan. Comerciá recursos con otros jugadores y expandí tu civilización.',
-      price: '$4.500', minPlayers: 3, maxPlayers: 4, minAge: 10,
+      minPlayers: 3, maxPlayers: 4, minAge: 10,
       pace: 'slow', youtubeURL: 'https://www.youtube.com/watch?v=FaiDRMPVVgo', thumbnail: ''
     },
     {
       id: 'uno', name: 'Uno',
       description: 'El clásico juego de cartas donde debés deshacerte de todas las cartas antes que los demás. ¡No olvides gritar UNO!',
-      price: '$1.200', minPlayers: 2, maxPlayers: 10, minAge: 7,
+      minPlayers: 2, maxPlayers: 10, minAge: 7,
       pace: 'fast', youtubeURL: 'https://www.youtube.com/watch?v=JbAnxGKt8Xk', thumbnail: ''
     },
     {
       id: 'dobble', name: 'Dobble',
       description: 'Velocidad y concentración: encontrá el símbolo común entre dos cartas antes que los demás. Perfecto para todas las edades.',
-      price: '$1.800', minPlayers: 2, maxPlayers: 8, minAge: 5,
+      minPlayers: 2, maxPlayers: 8, minAge: 5,
       pace: 'fast', youtubeURL: 'https://www.youtube.com/watch?v=p-oBajkS6kc', thumbnail: ''
     },
     {
       id: 'pandemic', name: 'Pandemia',
       description: 'Trabajá en equipo para detener cuatro enfermedades mortales. Un juego cooperativo épico donde todos ganan o todos pierden.',
-      price: '$5.200', minPlayers: 2, maxPlayers: 4, minAge: 10,
+      minPlayers: 2, maxPlayers: 4, minAge: 10,
       pace: 'slow', youtubeURL: 'https://www.youtube.com/watch?v=kjXdFbM6v9w', thumbnail: ''
     },
     {
       id: 'dixit', name: 'Dixit',
       description: 'Usá tu imaginación para describir cartas con ilustraciones surrealistas. Creatividad, deducción y diversión para toda la familia.',
-      price: '$3.800', minPlayers: 3, maxPlayers: 6, minAge: 7,
+      minPlayers: 3, maxPlayers: 6, minAge: 7,
       pace: 'slow', youtubeURL: 'https://www.youtube.com/watch?v=5P-rD6DvKnM', thumbnail: ''
     }
   ];
@@ -70,7 +70,6 @@ App.Data = (function () {
       id:          row.id,
       name:        row.name        || '',
       description: row.description || '',
-      price:       row.price       || '',
       minPlayers:  row.min_players,
       maxPlayers:  row.max_players,
       minAge:      row.min_age,
@@ -85,7 +84,6 @@ App.Data = (function () {
       id:          game.id,
       name:        game.name        || '',
       description: game.description || '',
-      price:       game.price       || '',
       min_players: game.minPlayers,
       max_players: game.maxPlayers,
       min_age:     game.minAge,

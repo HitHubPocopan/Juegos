@@ -71,11 +71,20 @@
     /* -- ADMIN: panel -- */
     _on('adm-logout-btn', 'click', function () { App.Views.admin.logout();           });
     _on('adm-add-btn',    'click', function () { App.Views.admin.openModal(null);    });
+    _on('adm-import-btn', 'click', function () { App.Views.admin.openImportFile();   });
+    _on('excel-input',    'change', function (e) { App.Views.admin.handleExcelFile(e); });
 
-    /* -- MODAL -- */
+    /* -- MODAL juego -- */
     _on('modal-close-btn', 'click', function () { App.Views.admin.closeModal();      });
     _on('modal-save-btn',  'click', function () { App.Views.admin.saveGame();        });
     _on('game-modal',      'click', function (e) { App.Views.admin.modalBgClick(e); });
+
+    /* -- MODAL importar -- */
+    _on('import-modal-close-btn', 'click', function () { App.Views.admin.closeImportModal();  });
+    _on('import-confirm-btn',     'click', function () { App.Views.admin.confirmImport();     });
+    _on('import-modal',           'click', function (e) {
+      if (e.target === document.getElementById('import-modal')) App.Views.admin.closeImportModal();
+    });
   }
 
   /* ── Hash routing ───────────────────────────────── */
