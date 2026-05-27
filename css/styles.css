@@ -641,6 +641,24 @@ button, input, select, textarea {
 
 .btn-import-excel:active { background: #fff3e0; }
 
+.btn-clear-catalog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #fff;
+  color: #e53935;
+  border: 1.5px solid #e53935;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .14s;
+}
+
+.btn-clear-catalog:active { background: #ffebee; }
+
 .adm-row {
   display: flex;
   align-items: center;

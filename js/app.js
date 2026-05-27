@@ -71,6 +71,7 @@
     /* -- ADMIN: panel -- */
     _on('adm-logout-btn', 'click', function () { App.Views.admin.logout();           });
     _on('adm-add-btn',    'click', function () { App.Views.admin.openModal(null);    });
+    _on('adm-clear-btn',  'click', function () { App.Views.admin.clearCatalog();     });
     _on('adm-import-btn', 'click', function () { App.Views.admin.openImportFile();   });
     _on('excel-input',    'change', function (e) { App.Views.admin.handleExcelFile(e); });
 

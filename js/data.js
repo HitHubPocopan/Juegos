@@ -232,6 +232,26 @@ App.Data = (function () {
     return Promise.resolve();
   }
 
+  /**
+   * Elimina TODOS los juegos del catálogo.
+   * @returns {Promise<void>}
+   */
+  function deleteAllGames() {
+    if (_db) {
+      return _db
+        .from('games')
+        .delete()
+        .neq('id', '')        // condición que coincide con todas las filas
+        .then(function (res) {
+          if (res.error) throw res.error;
+          _cache = [];
+        });
+    }
+    _cache = [];
+    _lsWrite([]);
+    return Promise.resolve();
+  }
+
   /* ── localStorage helpers ───────────────────────── */
 
   function _lsRead() {
@@ -248,6 +268,6 @@ App.Data = (function () {
 
   /* ── API pública ────────────────────────────────── */
 
-  return { init, getGames, addGame, updateGame, deleteGame, ADMIN_PASS };
+  return { init, getGames, addGame, updateGame, deleteGame, deleteAllGames, ADMIN_PASS };
 
 }());

@@ -248,6 +248,37 @@ App.Views.admin = (function () {
     errEl.hidden = false;
   }
 
+  /* ── Vaciar catálogo ────────────────────────────── */
+
+  /**
+   * Pide doble confirmación y elimina todos los juegos del catálogo.
+   */
+  function clearCatalog() {
+    var total = App.Data.getGames().length;
+    if (!total) {
+      App.Utils.toast('ℹ️ El catálogo ya está vacío');
+      return;
+    }
+    if (!confirm('⚠️ ¿Eliminar los ' + total + ' juegos del catálogo?\nEsta acción no se puede deshacer.')) return;
+    if (!confirm('Segunda confirmación: ¿estás seguro?')) return;
+
+    var btn = $('adm-clear-btn');
+    btn.disabled = true;
+
+    App.Data.deleteAllGames()
+      .then(function () {
+        _renderList();
+        App.Utils.toast('🗑️ Catálogo vaciado');
+      })
+      .catch(function (err) {
+        console.error('[Admin] Error al vaciar catálogo:', err);
+        App.Utils.toast('❌ Error al vaciar el catálogo');
+      })
+      .finally(function () {
+        btn.disabled = false;
+      });
+  }
+
   /* ── Importar Excel ─────────────────────────────── */
 
   var _importGames = [];  // juegos parseados del Excel, pendientes de confirmar
@@ -445,7 +476,8 @@ App.Views.admin = (function () {
     openImportFile,
     handleExcelFile,
     closeImportModal,
-    confirmImport
+    confirmImport,
+    clearCatalog
   };
 
 }());
