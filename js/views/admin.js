@@ -206,32 +206,43 @@ App.Views.admin = (function () {
       thumbnail:   $('f-img').value.trim()
     };
 
-    var games = App.Data.getGames();
-    var idx   = _editingId
-      ? games.findIndex(function (g) { return g.id === _editingId; })
-      : -1;
+    var isEdit  = !!_editingId;
+    var promise = isEdit
+      ? App.Data.updateGame(gameData)
+      : App.Data.addGame(gameData);
 
-    if (idx !== -1) {
-      games[idx] = gameData;  // actualizar
-    } else {
-      games.push(gameData);   // agregar
-    }
+    // Deshabilitar botón mientras guarda
+    var saveBtn = $('modal-save-btn');
+    saveBtn.disabled = true;
 
-    App.Data.setGames(games);
-    closeModal();
-    _renderList();
-    App.Utils.toast(_editingId ? '✅ Juego actualizado' : '✅ Juego agregado');
+    promise
+      .then(function () {
+        closeModal();
+        _renderList();
+        App.Utils.toast(isEdit ? '✅ Juego actualizado' : '✅ Juego agregado');
+      })
+      .catch(function (err) {
+        console.error('[Admin] Error al guardar:', err);
+        _showModalError('Error al guardar. Intentá de nuevo.');
+      })
+      .finally(function () {
+        saveBtn.disabled = false;
+      });
   }
 
   /* ── Eliminar juego ─────────────────────────────── */
 
   function _deleteGame(id) {
     if (!confirm('¿Eliminar este juego del catálogo?')) return;
-    App.Data.setGames(
-      App.Data.getGames().filter(function (g) { return g.id !== id; })
-    );
-    _renderList();
-    App.Utils.toast('🗑️ Juego eliminado');
+    App.Data.deleteGame(id)
+      .then(function () {
+        _renderList();
+        App.Utils.toast('🗑️ Juego eliminado');
+      })
+      .catch(function (err) {
+        console.error('[Admin] Error al eliminar:', err);
+        App.Utils.toast('❌ Error al eliminar. Intentá de nuevo.');
+      });
   }
 
   /* ── Helper de error en modal ───────────────────── */

@@ -243,6 +243,9 @@
   <!-- ════════════════════════════════════════
        SCRIPTS — orden de dependencias
   ════════════════════════════════════════ -->
+  <!-- Supabase JS client (UMD) — debe ir antes de data.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/router.js"></script>
   <script src="js/utils.js"></script>

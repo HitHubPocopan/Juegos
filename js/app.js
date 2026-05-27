@@ -15,13 +15,25 @@
   // Los scripts al final del <body> se ejecutan con el DOM ya disponible
   // (readyState === 'interactive' o 'complete'). Se cubre ambos casos.
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      _bindEvents();
-      _initHashRouting();
-    });
+    document.addEventListener('DOMContentLoaded', _boot);
   } else {
-    _bindEvents();
-    _initHashRouting();
+    _boot();
+  }
+
+  /* ── Boot: inicializar datos y luego arrancar ───── */
+  function _boot() {
+    App.Data.init()
+      .then(function () {
+        _bindEvents();
+        _initHashRouting();
+      })
+      .catch(function (err) {
+        // init() ya logea y usa localStorage como fallback; esto no debería ocurrir,
+        // pero si ocurre de todos modos arrancamos la app con lo que tengamos
+        console.error('[App] Fallo crítico en init:', err);
+        _bindEvents();
+        _initHashRouting();
+      });
   }
 
   /* ── Bindings de eventos estáticos ─────────────── */
@@ -77,8 +89,7 @@
     if (location.hash === '#admin-panel-access') {
       App.Router.go('admin');
     } else if (!App.Router.current()) {
-      // Primera carga: sembrar datos y mostrar home
-      App.Data.getGames();
+      // Primera carga: los datos ya están en caché gracias a init()
       App.Router.go('home');
     }
   }
