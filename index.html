@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catálogo interactivo de PocoPan Juguetería">
+  <title>PocoPan Juguetería — Catálogo</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════
+       VISTA: HOME
+  ════════════════════════════════════════ -->
+  <div id="v-home" class="view">
+    <div class="home-logo" aria-hidden="true">🎲</div>
+    <h1 class="home-title">PocoPan<br>Juguetería</h1>
+    <p class="home-sub">Descubrí tu próximo juego favorito</p>
+    <button id="btn-go-search"  class="btn-cta btn-orange">🔍 Buscar Juego</button>
+    <button id="btn-go-advisor" class="btn-cta btn-ghost">🎯 Asesorarme</button>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       VISTA: BUSCAR JUEGO
+  ════════════════════════════════════════ -->
+  <div id="v-search" class="view">
+    <header class="hdr">
+      <button id="search-back" class="btn-back" aria-label="Volver al inicio">←</button>
+      <span class="hdr-title">Buscar Juego</span>
+      <div class="hdr-space" aria-hidden="true"></div>
+    </header>
+
+    <div class="srch-wrap">
+      <span class="srch-icon" aria-hidden="true">🔍</span>
+      <input
+        id="srch-inp"
+        class="srch-input"
+        type="search"
+        placeholder="Nombre del juego…"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Buscar juego"
+      >
+    </div>
+
+    <div id="srch-cards" class="cards" role="list"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       VISTA: VIDEO PLAYER
+  ════════════════════════════════════════ -->
+  <div id="v-video" class="view">
+    <div class="vid-hdr">
+      <button id="vid-back" class="btn-back vid-back-btn" aria-label="Volver">←</button>
+      <span id="vid-title" class="vid-name"></span>
+      <div class="hdr-space" aria-hidden="true"></div>
+    </div>
+
+    <div class="vid-body">
+      <div id="vid-wrap" class="vid-frame-wrap"></div>
+    </div>
+
+    <div class="vid-btns">
+      <button id="vid-replay" class="vid-btn vid-btn-replay">🔄 Ver de nuevo</button>
+      <button id="vid-home"   class="vid-btn vid-btn-back">← Volver al menú</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       VISTA: ASESORARME (wizard)
+  ════════════════════════════════════════ -->
+  <div id="v-advisor" class="view">
+    <header class="hdr">
+      <button id="wiz-back-btn" class="btn-back" aria-label="Volver">←</button>
+      <span class="hdr-title">Asesoramiento</span>
+      <div class="hdr-space" aria-hidden="true"></div>
+    </header>
+
+    <div class="wiz-inner">
+      <div class="wiz-prog" role="progressbar" aria-label="Progreso del asistente">
+        <div class="wiz-dot" id="wd0"></div>
+        <div class="wiz-dot" id="wd1"></div>
+        <div class="wiz-dot" id="wd2"></div>
+      </div>
+      <div id="wiz-body"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       VISTA: RECOMENDACIONES
+  ════════════════════════════════════════ -->
+  <div id="v-reco" class="view">
+    <header class="hdr">
+      <button id="reco-back" class="btn-back" aria-label="Volver al asistente">←</button>
+      <span class="hdr-title">Para vos</span>
+      <div class="hdr-space" aria-hidden="true"></div>
+    </header>
+
+    <div class="reco-hdr">
+      <h2>🎲 Tu selección</h2>
+      <p id="reco-sub"></p>
+    </div>
+
+    <div id="reco-cards" class="cards" role="list"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       VISTA: ADMIN
+  ════════════════════════════════════════ -->
+  <div id="v-admin" class="view">
+
+    <!-- Pantalla de login -->
+    <div id="adm-login">
+      <div class="adm-login">
+        <div class="adm-login-icon" aria-hidden="true">🔐</div>
+        <h2>Panel Administrador</h2>
+        <p>Ingresá la contraseña para continuar</p>
+
+        <div class="form-grp">
+          <label class="form-lbl" for="adm-pw">Contraseña</label>
+          <input
+            id="adm-pw"
+            class="form-inp"
+            type="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button id="adm-login-btn" class="btn-sub">Ingresar</button>
+        <p class="err-msg" id="adm-err" role="alert" hidden>Contraseña incorrecta</p>
+        <button id="exit-admin-btn" class="btn-text-link">← Volver al inicio</button>
+      </div>
+    </div>
+
+    <!-- Panel de gestión (oculto hasta autenticar) -->
+    <div id="adm-panel" hidden>
+      <header class="hdr">
+        <button id="adm-logout-btn" class="btn-back" aria-label="Cerrar sesión">←</button>
+        <span class="hdr-title">⚙️ Admin Panel</span>
+        <div class="hdr-space" aria-hidden="true"></div>
+      </header>
+
+      <div class="adm-panel-wrap">
+        <div class="adm-box">
+          <div class="adm-box-hdr">
+            <span>Catálogo de juegos</span>
+            <button id="adm-add-btn" class="btn-add-game">+ Agregar</button>
+          </div>
+          <div id="adm-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /v-admin -->
+
+  <!-- ════════════════════════════════════════
+       MODAL: AGREGAR / EDITAR JUEGO
+  ════════════════════════════════════════ -->
+  <div
+    id="game-modal"
+    class="modal-bg"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-h"
+  >
+    <div class="modal-sheet">
+      <h3 class="modal-title" id="modal-h">Agregar juego</h3>
+      <button id="modal-close-btn" class="modal-close" aria-label="Cerrar">✕</button>
+
+      <div class="form-grp">
+        <label class="form-lbl" for="f-name">Nombre *</label>
+        <input id="f-name" class="form-inp" type="text" placeholder="Ej: Catan">
+      </div>
+
+      <div class="form-grp">
+        <label class="form-lbl" for="f-desc">Descripción</label>
+        <textarea id="f-desc" class="form-inp" rows="3" placeholder="Breve descripción…"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-grp">
+          <label class="form-lbl" for="f-price">Precio *</label>
+          <input id="f-price" class="form-inp" type="text" placeholder="$4500">
+        </div>
+        <div class="form-grp">
+          <label class="form-lbl" for="f-age">Edad mín *</label>
+          <select id="f-age" class="form-inp">
+            <option value="">Seleccioná…</option>
+            <option value="3">+3 años</option>
+            <option value="5">+5 años</option>
+            <option value="7">+7 años</option>
+            <option value="10">+10 años</option>
+            <option value="15">+15 años</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-grp">
+          <label class="form-lbl" for="f-minp">Jugadores mín *</label>
+          <input id="f-minp" class="form-inp" type="number" min="1" placeholder="2">
+        </div>
+        <div class="form-grp">
+          <label class="form-lbl" for="f-maxp">Jugadores máx *</label>
+          <input id="f-maxp" class="form-inp" type="number" min="1" placeholder="4">
+        </div>
+      </div>
+
+      <div class="form-grp">
+        <label class="form-lbl" for="f-pace">Ritmo *</label>
+        <select id="f-pace" class="form-inp">
+          <option value="slow">Tranquilo 🧩</option>
+          <option value="fast">Rápido ⚡</option>
+        </select>
+      </div>
+
+      <div class="form-grp">
+        <label class="form-lbl" for="f-yt">URL de YouTube</label>
+        <input id="f-yt" class="form-inp" type="url" placeholder="https://youtube.com/watch?v=…">
+      </div>
+
+      <div class="form-grp">
+        <label class="form-lbl" for="f-img">URL de imagen</label>
+        <input id="f-img" class="form-inp" type="url" placeholder="https://…">
+      </div>
+
+      <button id="modal-save-btn" class="btn-sub" style="max-width:none;width:100%;margin-top:4px;">
+        Guardar juego
+      </button>
+      <p class="err-msg" id="modal-err" role="alert" hidden></p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TOAST
+  ════════════════════════════════════════ -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- ════════════════════════════════════════
+       SCRIPTS — orden de dependencias
+  ════════════════════════════════════════ -->
+  <script src="js/data.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/views/search.js"></script>
+  <script src="js/views/video.js"></script>
+  <script src="js/views/advisor.js"></script>
+  <script src="js/views/admin.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

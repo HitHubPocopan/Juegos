@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poco Pan Juguetería — Catálogo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:      #ffffff;
+      --light:      #f5f5f5;
+      --mid:        #9e9e9e;
+      --dark:       #2c2c2c;
+      --accent:     #ef7d1a;
+      --accent-dk:  #d46c10;
+      --green:      #4caf50;
+      --red:        #e53935;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --r: 14px;
+      --sh: 0 2px 12px rgba(0,0,0,.08);
+      --sh2: 0 6px 24px rgba(0,0,0,.13);
+    }
+
+    html { height: 100%; }
+    body {
+      height: 100%; overflow: hidden;
+      font-family: var(--font);
+      background: var(--light);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── VIEWS ──────────────────────────────────────── */
+    .view {
+      position: fixed; inset: 0;
+      overflow-y: auto; overflow-x: hidden;
+      background: var(--light);
+      opacity: 0;
+      transform: translateY(12px) scale(.99);
+      transition: opacity .22s ease, transform .22s ease;
+      pointer-events: none;
+      z-index: 1;
+      -webkit-overflow-scrolling: touch;
+    }
+    .view.active {
+      opacity: 1; transform: none;
+      pointer-events: all; z-index: 10;
+    }
+    .view.exit {
+      opacity: 0; transform: translateY(-10px) scale(1.01);
+      pointer-events: none;
+    }
+
+    /* ── HOME ───────────────────────────────────────── */
+    #v-home {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100%; padding: 48px 28px;
+      background: var(--white);
+      overflow: hidden;
+    }
+    .home-logo {
+      width: 96px; height: 96px;
+      background: var(--accent);
+      border-radius: 26px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 46px;
+      box-shadow: 0 10px 30px rgba(239,125,26,.35);
+      margin-bottom: 22px;
+    }
+    .home-title {
+      font-size: 30px; font-weight: 900;
+      text-align: center; line-height: 1.15;
+      margin-bottom: 8px; color: var(--dark);
+    }
+    .home-sub {
+      font-size: 15px; color: var(--mid);
+      text-align: center; margin-bottom: 52px;
+    }
+    .btn-cta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; width: 100%; max-width: 330px;
+      min-height: 64px; padding: 0 24px;
+      border-radius: var(--r); border: none;
+      font-family: var(--font); font-size: 18px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: transform .15s, box-shadow .15s, background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-cta:active { transform: scale(.97); }
+    .btn-orange {
+      background: var(--accent); color: var(--white);
+      box-shadow: 0 6px 20px rgba(239,125,26,.38);
+      margin-bottom: 14px;
+    }
+    .btn-orange:hover { background: var(--accent-dk); }
+    .btn-ghost {
+      background: var(--light); color: var(--dark);
+      border: 2px solid #e4e4e4;
+    }
+    .btn-ghost:hover { background: #ebebeb; }
+
+    /* ── SHARED HEADER ──────────────────────────────── */
+    .hdr {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center;
+      height: 60px; padding: 0 16px;
+      background: var(--white);
+      border-bottom: 1px solid #efefef;
+    }
+    .btn-back {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: 10px; border: none;
+      background: var(--light); cursor: pointer; font-size: 20px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .15s;
+    }
+    .btn-back:active { background: #ddd; }
+    .hdr-title {
+      flex: 1; text-align: center;
+      font-size: 17px; font-weight: 700;
+      margin: 0 8px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hdr-space { width: 44px; flex-shrink: 0; }
+
+    /* ── SEARCH ─────────────────────────────────────── */
+    .srch-wrap {
+      padding: 14px 16px 8px;
+      position: relative;
+    }
+    .srch-icon {
+      position: absolute; left: 30px; top: 50%; transform: translateY(-50%);
+      font-size: 17px; pointer-events: none;
+    }
+    .srch-input {
+      width: 100%; height: 52px;
+      padding: 0 16px 0 46px;
+      border-radius: 12px; border: 2px solid transparent;
+      background: var(--white); font-family: var(--font);
+      font-size: 16px; color: var(--dark);
+      box-shadow: var(--sh); outline: none;
+      transition: border-color .2s;
+    }
+    .srch-input:focus { border-color: var(--accent); }
+    .srch-input::placeholder { color: var(--mid); }
+
+    /* ── GAME CARDS ─────────────────────────────────── */
+    .cards {
+      padding: 8px 16px 32px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px; border-radius: var(--r);
+      background: var(--white); box-shadow: var(--sh);
+      cursor: pointer; border: 2px solid transparent;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .15s, border-color .15s;
+    }
+    .card:active { transform: scale(.975); border-color: var(--accent); }
+    .card-thumb {
+      width: 72px; height: 72px; border-radius: 10px;
+      object-fit: cover; background: var(--light); flex-shrink: 0;
+    }
+    .card-thumb-ph {
+      width: 72px; height: 72px; border-radius: 10px;
+      background: linear-gradient(135deg,#f0f0f0,#e4e4e4);
+      flex-shrink: 0; display: flex; align-items: center;
+      justify-content: center; font-size: 30px;
+    }
+    .card-body { flex: 1; min-width: 0; }
+    .card-name {
+      font-size: 16px; font-weight: 700; margin-bottom: 5px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+    .tag {
+      font-size: 11px; font-weight: 600;
+      padding: 2px 9px; border-radius: 20px;
+      background: var(--light); color: var(--mid);
+    }
+    .tag-slow { background: #e8f5e9; color: #388e3c; }
+    .tag-fast { background: #fff3e0; color: var(--accent); }
+    .card-price { font-size: 17px; font-weight: 800; color: var(--accent); }
+    .card-play { font-size: 20px; color: #ccc; flex-shrink: 0; }
+    .empty {
+      padding: 64px 24px; text-align: center; color: var(--mid);
+    }
+    .empty span { font-size: 44px; display: block; margin-bottom: 14px; }
+    .empty p { font-size: 15px; line-height: 1.5; }
+
+    /* ── VIDEO ──────────────────────────────────────── */
+    #v-video {
+      background: #000; display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .vid-hdr {
+      display: flex; align-items: center;
+      height: 60px; padding: 0 16px; flex-shrink: 0;
+    }
+    .vid-hdr .btn-back {
+      background: rgba(255,255,255,.15); color: #fff;
+    }
+    .vid-hdr .btn-back:active { background: rgba(255,255,255,.28); }
+    .vid-name {
+      flex: 1; text-align: center; font-size: 15px;
+      font-weight: 600; color: #fff; margin: 0 8px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .vid-body {
+      flex: 1; display: flex;
+      align-items: center; justify-content: center;
+      min-height: 0; overflow: hidden;
+    }
+    .vid-frame-wrap {
+      width: min(100%, calc((100vh - 136px) * 9 / 16));
+      height: 100%; position: relative;
+    }
+    .vid-frame-wrap iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+    }
+    .vid-btns {
+      display: flex; gap: 12px; padding: 12px 16px 20px;
+      flex-shrink: 0; background: #000;
+    }
+    .vid-btn {
+      flex: 1; height: 52px; border-radius: 10px; border: none;
+      font-family: var(--font); font-size: 15px; font-weight: 700;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      transition: opacity .15s;
+    }
+    .vid-btn:active { opacity: .75; }
+    .vid-btn-replay { background: var(--accent); color: #fff; }
+    .vid-btn-back   { background: rgba(255,255,255,.14); color: #fff; }
+
+    /* ── WIZARD ─────────────────────────────────────── */
+    .wiz-inner {
+      padding: 28px 20px 40px; max-width: 480px; margin: 0 auto;
+    }
+    .wiz-prog {
+      display: flex; gap: 8px; margin-bottom: 36px;
+    }
+    .wiz-dot {
+      flex: 1; height: 4px; border-radius: 2px;
+      background: #e4e4e4; transition: background .3s;
+    }
+    .wiz-dot.done { background: var(--green); }
+    .wiz-dot.now  { background: var(--accent); }
+    .wiz-step-lbl {
+      text-align: center; font-size: 12px; font-weight: 700;
+      color: var(--mid); letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .wiz-q {
+      font-size: 23px; font-weight: 800;
+      text-align: center; line-height: 1.25;
+      margin-bottom: 32px; color: var(--dark);
+    }
+    .wiz-opts { display: flex; flex-direction: column; gap: 12px; }
+    .wiz-opt {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 64px; padding: 0 24px;
+      border-radius: var(--r); border: 2px solid #e4e4e4;
+      background: var(--white); font-family: var(--font);
+      font-size: 17px; font-weight: 600; color: var(--dark);
+      cursor: pointer; box-shadow: var(--sh);
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color .18s, background .18s, color .18s, transform .15s;
+    }
+    .wiz-opt:active {
+      border-color: var(--accent); background: #fff8f2;
+      color: var(--accent); transform: scale(.97);
+    }
+
+    /* ── RECO HEADER ────────────────────────────────── */
+    .reco-hdr {
+      padding: 28px 16px 4px; text-align: center;
+    }
+    .reco-hdr h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .reco-hdr p  { font-size: 14px; color: var(--mid); }
+
+    /* ── ADMIN ──────────────────────────────────────── */
+    .adm-login {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100%; padding: 48px 24px;
+    }
+    .adm-login-icon { font-size: 52px; margin-bottom: 14px; }
+    .adm-login h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .adm-login p  { font-size: 14px; color: var(--mid); margin-bottom: 32px; }
+    .form-grp { width: 100%; max-width: 360px; margin-bottom: 14px; }
+    .form-lbl {
+      display: block; font-size: 12px; font-weight: 700;
+      color: var(--dark); margin-bottom: 6px; text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .form-inp {
+      width: 100%; height: 52px; padding: 0 14px;
+      border-radius: 10px; border: 2px solid #e4e4e4;
+      background: var(--white); font-family: var(--font);
+      font-size: 16px; color: var(--dark);
+      outline: none; transition: border-color .2s;
+    }
+    .form-inp:focus { border-color: var(--accent); }
+    .form-inp::placeholder { color: var(--mid); }
+    textarea.form-inp {
+      height: auto; min-height: 80px;
+      padding: 12px 14px; resize: none;
+    }
+    select.form-inp {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239e9e9e' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px; cursor: pointer;
+    }
+    .btn-sub {
+      width: 100%; max-width: 360px; height: 56px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--r);
+      font-family: var(--font); font-size: 17px; font-weight: 700;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      transition: background .15s, transform .15s;
+    }
+    .btn-sub:active { background: var(--accent-dk); transform: scale(.98); }
+    .err-msg {
+      font-size: 13px; color: var(--red); text-align: center;
+      margin-top: 10px; font-weight: 600;
+    }
+    .adm-panel-wrap { padding: 16px; }
+    .adm-box {
+      background: var(--white); border-radius: var(--r);
+      box-shadow: var(--sh); overflow: hidden; margin-bottom: 16px;
+    }
+    .adm-box-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px; border-bottom: 1px solid #f0f0f0;
+    }
+    .adm-box-hdr span { font-size: 15px; font-weight: 700; }
+    .btn-add-game {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; font-family: var(--font);
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .adm-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 18px; border-bottom: 1px solid #f8f8f8;
+    }
+    .adm-row:last-child { border-bottom: none; }
+    .adm-thumb {
+      width: 46px; height: 46px; border-radius: 8px;
+      object-fit: cover; background: var(--light); flex-shrink: 0;
+    }
+    .adm-thumb-ph {
+      width: 46px; height: 46px; border-radius: 8px;
+      background: var(--light); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .adm-info { flex: 1; min-width: 0; }
+    .adm-gname {
+      font-size: 14px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .adm-gprice { font-size: 12px; color: var(--accent); font-weight: 700; }
+    .adm-acts { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-ico {
+      width: 36px; height: 36px; display: flex;
+      align-items: center; justify-content: center;
+      border-radius: 8px; border: none; cursor: pointer;
+      font-size: 16px; -webkit-tap-highlight-color: transparent;
+    }
+    .btn-edit  { background: #fff3e0; color: var(--accent); }
+    .btn-del   { background: #ffebee; color: var(--red); }
+    .adm-empty { padding: 32px; text-align: center; color: var(--mid); font-size: 14px; }
+
+    /* ── MODAL BOTTOM SHEET ─────────────────────────── */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      z-index: 200; display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
+    .modal-sheet {
+      background: var(--white); border-radius: 20px 20px 0 0;
+      width: 100%; max-height: 92vh; overflow-y: auto;
+      padding: 24px 16px 40px; position: relative;
+      transform: translateY(100%); transition: transform .28s ease;
+    }
+    .modal-bg.open .modal-sheet { transform: none; }
+    .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; padding-right: 44px; }
+    .modal-close {
+      position: absolute; top: 20px; right: 16px;
+      width: 36px; height: 36px; background: var(--light);
+      border: none; border-radius: 50%; font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-grp { max-width: none; }
+
+    /* ── TOAST ──────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--dark); color: #fff;
+      padding: 11px 22px; border-radius: 100px;
+      font-size: 14px; font-weight: 600;
+      z-index: 9999; white-space: nowrap;
+      transition: transform .28s ease; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (min-width: 500px) {
+      .wiz-inner, .adm-panel-wrap { max-width: 500px; margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     VIEW: HOME
+════════════════════════════════════════════════════ -->
+<div id="v-home" class="view">
+  <div class="home-logo">🎲</div>
+  <h1 class="home-title">Poco Pan<br>Juguetería</h1>
+  <p class="home-sub">Descubrí tu próximo juego favorito</p>
+  <button class="btn-cta btn-orange" onclick="go('search')">🔍 Buscar Juego</button>
+  <button class="btn-cta btn-ghost"  onclick="go('advisor')">🎯 Asesorarme</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     VIEW: SEARCH
+════════════════════════════════════════════════════ -->
+<div id="v-search" class="view">
+  <div class="hdr">
+    <button class="btn-back" onclick="go('home')">←</button>
+    <span class="hdr-title">Buscar Juego</span>
+    <div class="hdr-space"></div>
+  </div>
+  <div class="srch-wrap">
+    <span class="srch-icon">🔍</span>
+    <input id="srch-inp" class="srch-input" type="search"
+      placeholder="Nombre del juego…"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      oninput="onSearch(this.value)">
+  </div>
+  <div id="srch-cards" class="cards"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     VIEW: VIDEO
+════════════════════════════════════════════════════ -->
+<div id="v-video" class="view">
+  <div class="vid-hdr">
+    <button class="btn-back" onclick="goBack()" style="background:rgba(255,255,255,.15);color:#fff">←</button>
+    <span class="vid-name" id="vid-title"></span>
+    <div class="hdr-space"></div>
+  </div>
+  <div class="vid-body">
+    <div class="vid-frame-wrap" id="vid-wrap"></div>
+  </div>
+  <div class="vid-btns">
+    <button class="vid-btn vid-btn-replay" onclick="replayVid()">🔄 Ver de nuevo</button>
+    <button class="vid-btn vid-btn-back"   onclick="go('home')">← Volver al menú</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     VIEW: ADVISOR WIZARD
+════════════════════════════════════════════════════ -->
+<div id="v-advisor" class="view">
+  <div class="hdr">
+    <button class="btn-back" id="wiz-back-btn">←</button>
+    <span class="hdr-title">Asesoramiento</span>
+    <div class="hdr-space"></div>
+  </div>
+  <div class="wiz-inner">
+    <div class="wiz-prog">
+      <div class="wiz-dot" id="wd0"></div>
+      <div class="wiz-dot" id="wd1"></div>
+      <div class="wiz-dot" id="wd2"></div>
+    </div>
+    <div id="wiz-body"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     VIEW: RECOMMENDATIONS
+════════════════════════════════════════════════════ -->
+<div id="v-reco" class="view">
+  <div class="hdr">
+    <button class="btn-back" onclick="go('advisor')">←</button>
+    <span class="hdr-title">Para vos</span>
+    <div class="hdr-space"></div>
+  </div>
+  <div class="reco-hdr">
+    <h2>🎲 Tu selección</h2>
+    <p id="reco-sub"></p>
+  </div>
+  <div id="reco-cards" class="cards"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     VIEW: ADMIN
+════════════════════════════════════════════════════ -->
+<div id="v-admin" class="view">
+  <!-- Login screen -->
+  <div id="adm-login">
+    <div class="adm-login">
+      <div class="adm-login-icon">🔐</div>
+      <h2>Panel Administrador</h2>
+      <p>Ingresá la contraseña para continuar</p>
+      <div class="form-grp">
+        <label class="form-lbl">Contraseña</label>
+        <input id="adm-pw" class="form-inp" type="password" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')admLogin()">
+      </div>
+      <button class="btn-sub" style="max-width:360px;width:100%;" onclick="admLogin()">Ingresar</button>
+      <div class="err-msg" id="adm-err" style="display:none">Contraseña incorrecta</div>
+      <button onclick="exitAdmin()" style="margin-top:18px;background:none;border:none;
+        font-family:var(--font);font-size:14px;color:var(--mid);cursor:pointer;padding:10px;">
+        ← Volver al inicio
+      </button>
+    </div>
+  </div>
+  <!-- Panel screen -->
+  <div id="adm-panel" style="display:none">
+    <div class="hdr">
+      <button class="btn-back" onclick="admLogout()">←</button>
+      <span class="hdr-title">⚙️ Admin Panel</span>
+      <div class="hdr-space"></div>
+    </div>
+    <div class="adm-panel-wrap">
+      <div class="adm-box">
+        <div class="adm-box-hdr">
+          <span>Catálogo de juegos</span>
+          <button class="btn-add-game" onclick="openModal(null)">+ Agregar</button>
+        </div>
+        <div id="adm-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     MODAL: ADD / EDIT GAME
+════════════════════════════════════════════════════ -->
+<div id="game-modal" class="modal-bg" onclick="modalBgClick(event)">
+  <div class="modal-sheet">
+    <h3 class="modal-title" id="modal-h">Agregar juego</h3>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div class="form-grp">
+      <label class="form-lbl">Nombre *</label>
+      <input id="f-name" class="form-inp" type="text" placeholder="Ej: Catan">
+    </div>
+    <div class="form-grp">
+      <label class="form-lbl">Descripción</label>
+      <textarea id="f-desc" class="form-inp" rows="3" placeholder="Breve descripción…"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-grp">
+        <label class="form-lbl">Precio *</label>
+        <input id="f-price" class="form-inp" type="text" placeholder="$4500">
+      </div>
+      <div class="form-grp">
+        <label class="form-lbl">Edad mín *</label>
+        <input id="f-age" class="form-inp" type="number" min="1" placeholder="8">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-grp">
+        <label class="form-lbl">Jugadores mín *</label>
+        <input id="f-minp" class="form-inp" type="number" min="1" placeholder="2">
+      </div>
+      <div class="form-grp">
+        <label class="form-lbl">Jugadores máx *</label>
+        <input id="f-maxp" class="form-inp" type="number" min="1" placeholder="4">
+      </div>
+    </div>
+    <div class="form-grp">
+      <label class="form-lbl">Ritmo *</label>
+      <select id="f-pace" class="form-inp">
+        <option value="slow">Tranquilo 🧩</option>
+        <option value="fast">Rápido ⚡</option>
+      </select>
+    </div>
+    <div class="form-grp">
+      <label class="form-lbl">URL de YouTube</label>
+      <input id="f-yt" class="form-inp" type="url" placeholder="https://youtube.com/watch?v=…">
+    </div>
+    <div class="form-grp">
+      <label class="form-lbl">URL de imagen (thumbnail)</label>
+      <input id="f-img" class="form-inp" type="url" placeholder="https://…">
+    </div>
+    <button class="btn-sub" style="width:100%;max-width:none;margin-top:4px;" onclick="saveGame()">Guardar juego</button>
+    <div class="err-msg" id="modal-err" style="display:none;margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     TOAST
+════════════════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── DEFAULT DATA ─────────────────────────────────── */
+const DEFAULTS = [
+  {
+    id: 'catan',
+    name: 'Catan',
+    description: 'Construí carreteras, asentamientos y ciudades en la isla de Catan. Comerciá recursos con otros jugadores y expandí tu civilización.',
+    price: '$4.500',
+    minPlayers: 3, maxPlayers: 4, minAge: 10,
+    pace: 'slow',
+    youtubeURL: 'https://www.youtube.com/watch?v=FaiDRMPVVgo',
+    thumbnail: 'https://m.media-amazon.com/images/I/71VijOmApZL._AC_SL400_.jpg'
+  },
+  {
+    id: 'uno',
+    name: 'Uno',
+    description: 'El clásico juego de cartas donde debés deshacerte de todas las cartas antes que los demás. ¡No olvides gritar UNO!',
+    price: '$1.200',
+    minPlayers: 2, maxPlayers: 10, minAge: 7,
+    pace: 'fast',
+    youtubeURL: 'https://www.youtube.com/watch?v=JbAnxGKt8Xk',
+    thumbnail: 'https://m.media-amazon.com/images/I/61XeNi4JFWL._AC_SL400_.jpg'
+  },
+  {
+    id: 'dobble',
+    name: 'Dobble',
+    description: 'Velocidad y concentración: encontrá el símbolo común entre dos cartas antes que los demás. Perfecto para todas las edades.',
+    price: '$1.800',
+    minPlayers: 2, maxPlayers: 8, minAge: 6,
+    pace: 'fast',
+    youtubeURL: 'https://www.youtube.com/watch?v=p-oBajkS6kc',
+    thumbnail: 'https://m.media-amazon.com/images/I/71P3JZWGP8L._AC_SL400_.jpg'
+  },
+  {
+    id: 'pandemic',
+    name: 'Pandemia',
+    description: 'Trabajá en equipo para detener cuatro enfermedades mortales. Un juego cooperativo épico donde todos ganan o todos pierden.',
+    price: '$5.200',
+    minPlayers: 2, maxPlayers: 4, minAge: 8,
+    pace: 'slow',
+    youtubeURL: 'https://www.youtube.com/watch?v=kjXdFbM6v9w',
+    thumbnail: 'https://m.media-amazon.com/images/I/81D3MHzZuVL._AC_SL400_.jpg'
+  },
+  {
+    id: 'dixit',
+    name: 'Dixit',
+    description: 'Usá tu imaginación para describir cartas con ilustraciones surrealistas. Creatividad, deducción y diversión para toda la familia.',
+    price: '$3.800',
+    minPlayers: 3, maxPlayers: 6, minAge: 8,
+    pace: 'slow',
+    youtubeURL: 'https://www.youtube.com/watch?v=5P-rD6DvKnM',
+    thumbnail: 'https://m.media-amazon.com/images/I/71Q3LeSCVFL._AC_SL400_.jpg'
+  }
+];
+
+const STORE_KEY   = 'ppj_games_v2';
+const ADMIN_PASS  = 'pocopan2024';
+
+/* ── STORAGE ──────────────────────────────────────── */
+function getGames() {
+  try {
+    const s = localStorage.getItem(STORE_KEY);
+    if (s) return JSON.parse(s);
+  } catch (e) {}
+  localStorage.setItem(STORE_KEY, JSON.stringify(DEFAULTS));
+  return DEFAULTS.slice();
+}
+function setGames(arr) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+}
+
+/* ── ROUTER ───────────────────────────────────────── */
+let curView  = '';
+let prevView = '';
+
+function go(id, skipSetup) {
+  if (id === curView) return;
+  const oldEl = curView ? document.getElementById('v-' + curView) : null;
+  const newEl = document.getElementById('v-' + id);
+  if (!newEl) return;
+
+  if (oldEl) {
+    oldEl.classList.remove('active');
+    oldEl.classList.add('exit');
+    setTimeout(() => oldEl.classList.remove('exit'), 300);
+  }
+  prevView = curView;
+  curView  = id;
+  newEl.classList.add('active');
+
+  if (!skipSetup) setupView(id);
+}
+
+function goBack() {
+  go(prevView || 'home');
+}
+
+function setupView(id) {
+  if (id === 'search')  { setupSearch(); }
+  if (id === 'advisor') { setupWizard(); }
+  if (id === 'admin')   { setupAdmin(); }
+}
+
+/* ── ESCAPE UTIL ──────────────────────────────────── */
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ── FUZZY SEARCH (Levenshtein) ───────────────────── */
+function normalize(s) {
+  return (s || '').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9 ]/g, ' ');
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  if (m === 0) return n; if (n === 0) return m;
+  const prev = Array.from({length: n + 1}, (_, i) => i);
+  const curr = new Array(n + 1);
+  for (let i = 1; i <= m; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= n; j++) {
+      curr[j] = a[i-1] === b[j-1]
+        ? prev[j-1]
+        : 1 + Math.min(prev[j], curr[j-1], prev[j-1]);
+    }
+    for (let k = 0; k <= n; k++) prev[k] = curr[k];
+  }
+  return prev[n];
+}
+
+function fuzzyScore(query, text) {
+  query = normalize(query).trim();
+  text  = normalize(text).trim();
+  if (!query) return 100;
+  if (text.includes(query)) return 100;
+
+  const words = text.split(/\s+/);
+  for (const w of words) {
+    if (w.startsWith(query)) return 90;
+  }
+
+  // per-word levenshtein
+  let best = 0;
+  for (const w of words) {
+    const sub = w.slice(0, query.length + 2);
+    const maxL = Math.max(query.length, sub.length);
+    if (maxL === 0) continue;
+    const sc = (1 - levenshtein(query, sub) / maxL) * 80;
+    if (sc > best) best = sc;
+  }
+
+  // full-text levenshtein (for very short queries)
+  const fullMax = Math.max(query.length, text.length);
+  const fullSc  = fullMax ? (1 - levenshtein(query, text) / fullMax) * 60 : 0;
+
+  return Math.max(best, fullSc);
+}
+
+function searchGames(q) {
+  const games = getGames();
+  if (!q.trim()) return games;
+  return games
+    .map(g => ({
+      g,
+      s: Math.max(
+        fuzzyScore(q, g.name),
+        fuzzyScore(q, g.description)
+      )
+    }))
+    .filter(x => x.s > 38)
+    .sort((a, b) => b.s - a.s)
+    .map(x => x.g);
+}
+
+/* ── CARD BUILDER ─────────────────────────────────── */
+function onImgErr(img, cls) {
+  const d = document.createElement('div');
+  d.className = cls + '-ph';
+  d.textContent = '🎲';
+  img.parentNode && img.parentNode.replaceChild(d, img);
+}
+
+function thumbHTML(g, cls) {
+  return g.thumbnail
+    ? `<img class="${cls}" src="${esc(g.thumbnail)}" alt="${esc(g.name)}" onerror="onImgErr(this,'${cls}')">`
+    : `<div class="${cls}-ph">🎲</div>`;
+}
+
+function buildCard(g, onclick) {
+  const d = document.createElement('div');
+  d.className = 'card';
+  d.onclick = onclick;
+  const pTag = g.pace === 'fast'
+    ? `<span class="tag tag-fast">Rápido ⚡</span>`
+    : `<span class="tag tag-slow">Tranquilo 🧩</span>`;
+  d.innerHTML = `
+    ${thumbHTML(g,'card-thumb')}
+    <div class="card-body">
+      <div class="card-name">${esc(g.name)}</div>
+      <div class="card-tags">
+        <span class="tag">👥 ${g.minPlayers}–${g.maxPlayers}</span>
+        <span class="tag">🎂 ${g.minAge}+</span>
+        ${pTag}
+      </div>
+      <div class="card-price">${esc(g.price)}</div>
+    </div>
+    <span class="card-play">▶</span>`;
+  return d;
+}
+
+/* ── SEARCH VIEW ──────────────────────────────────── */
+function setupSearch() {
+  const inp = document.getElementById('srch-inp');
+  inp.value = '';
+  renderCards('srch-cards', getGames(), 'search');
+  setTimeout(() => inp.focus(), 280);
+}
+
+function onSearch(q) {
+  renderCards('srch-cards', searchGames(q), 'search', q);
+}
+
+function renderCards(containerId, games, origin, query) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  if (!games.length) {
+    el.innerHTML = `<div class="empty"><span>🔍</span>
+      <p>Sin resultados para "<strong>${esc(query||'')}</strong>"<br>Probá con otro término</p></div>`;
+    return;
+  }
+  games.forEach(g => el.appendChild(buildCard(g, () => openVideo(g, origin))));
+}
+
+/* ── VIDEO VIEW ───────────────────────────────────── */
+let vidGame   = null;
+let vidOrigin = 'search';
+
+function openVideo(g, origin) {
+  vidGame   = g;
+  vidOrigin = origin || 'search';
+  document.getElementById('vid-title').textContent = g.name;
+  embedVideo(g.youtubeURL);
+  go('video', true); // skip generic setup
+}
+
+function embedVideo(url) {
+  const id  = extractYTID(url);
+  const wrap = document.getElementById('vid-wrap');
+  if (id) {
+    wrap.innerHTML = `<iframe
+      src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>`;
+  } else {
+    wrap.innerHTML = `<div style="position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;color:#555;gap:12px;">
+      <span style="font-size:52px">🎬</span>
+      <span style="font-size:14px">Video no disponible</span></div>`;
+  }
+}
+
+function replayVid() {
+  if (vidGame) {
+    document.getElementById('vid-wrap').innerHTML = '';
+    setTimeout(() => embedVideo(vidGame.youtubeURL), 50);
+  }
+}
+
+function extractYTID(url) {
+  if (!url) return null;
+  const m = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/
+  );
+  return m ? m[1] : (url.match(/^[A-Za-z0-9_-]{11}$/) ? url : null);
+}
+
+/* ── ADVISOR WIZARD ───────────────────────────────── */
+const WIZ_STEPS = [
+  {
+    key: 'players', q: '¿Cuántos jugadores son?',
+    opts: [
+      { lbl: '👤 Solo 2',    val: '2'   },
+      { lbl: '👥 2 a 4',    val: '2-4' },
+      { lbl: '🎉 4 a 6',    val: '4-6' },
+      { lbl: '🎊 6 a 8',    val: '6-8' }
+    ]
+  },
+  {
+    key: 'age', q: '¿La edad más baja del grupo?',
+    opts: [
+      { lbl: '🐣 3 a 5 años',     val: '3'  },
+      { lbl: '🧒 5 a 7 años',     val: '5'  },
+      { lbl: '👦 7 a 10 años',    val: '7'  },
+      { lbl: '🧑 10 a 15 años',   val: '10' },
+      { lbl: '🧑‍💼 Más de 15',     val: '15' }
+    ]
+  },
+  {
+    key: 'pace', q: '¿Preferís un juego lento o rápido?',
+    opts: [
+      { lbl: 'Tranquilo 🧩', val: 'slow' },
+      { lbl: 'Rápido ⚡',    val: 'fast' }
+    ]
+  }
+];
+
+let wizStep  = 0;
+let wizAnsws = {};
+
+function setupWizard() {
+  wizStep  = 0;
+  wizAnsws = {};
+  renderWizStep();
+}
+
+function renderWizStep() {
+  const total = WIZ_STEPS.length;
+  // Dots
+  for (let i = 0; i < total; i++) {
+    const d = document.getElementById('wd' + i);
+    d.className = 'wiz-dot' + (i < wizStep ? ' done' : i === wizStep ? ' now' : '');
+  }
+  // Back button
+  const bb = document.getElementById('wiz-back-btn');
+  bb.onclick = wizStep === 0 ? () => go('home') : wizPrev;
+
+  const step = WIZ_STEPS[wizStep];
+  const opts = step.opts.map(o =>
+    `<button class="wiz-opt" onclick="wizPick('${esc(o.val)}')">${o.lbl}</button>`
+  ).join('');
+
+  document.getElementById('wiz-body').innerHTML = `
+    <div class="wiz-step-lbl">Paso ${wizStep + 1} de ${total}</div>
+    <div class="wiz-q">${step.q}</div>
+    <div class="wiz-opts">${opts}</div>`;
+}
+
+function wizPrev() {
+  if (wizStep > 0) { wizStep--; renderWizStep(); }
+}
+
+function wizPick(val) {
+  wizAnsws[WIZ_STEPS[wizStep].key] = val;
+  if (wizStep < WIZ_STEPS.length - 1) {
+    wizStep++;
+    renderWizStep();
+  } else {
+    showReco();
+  }
+}
+
+function showReco() {
+  const { players, age, pace } = wizAnsws;
+  const minAge = parseInt(age) || 0;
+
+  // Player range
+  let minP = 2, maxP = 99;
+  if (players === '2')   { minP = 2;  maxP = 2;  }
+  if (players === '2-4') { minP = 2;  maxP = 4;  }
+  if (players === '4-6') { minP = 4;  maxP = 6;  }
+  if (players === '6-8') { minP = 6;  maxP = 8;  }
+
+  const all = getGames();
+
+  // Strict filter
+  let hits = all.filter(g =>
+    g.minPlayers <= maxP && g.maxPlayers >= minP &&
+    g.minAge <= minAge + 2 &&
+    g.pace === pace
+  );
+  // Relax pace
+  if (!hits.length) hits = all.filter(g =>
+    g.minPlayers <= maxP && g.maxPlayers >= minP &&
+    g.minAge <= minAge + 2
+  );
+  // Relax all
+  if (!hits.length) hits = all;
+
+  const paceLabel = pace === 'fast' ? 'rápido' : 'tranquilo';
+  const ageLbl    = age === '15' ? '+15 años' : `${age}+ años`;
+  document.getElementById('reco-sub').textContent =
+    `${players} jugadores · ${ageLbl} · Juego ${paceLabel}`;
+
+  renderCards('reco-cards', hits, 'reco');
+  go('reco');
+}
+
+/* ── ADMIN ────────────────────────────────────────── */
+let admAuth = false;
+let editId  = null;
+
+function setupAdmin() {
+  if (admAuth) {
+    showAdmPanel();
+  } else {
+    document.getElementById('adm-login').style.display = '';
+    document.getElementById('adm-panel').style.display = 'none';
+    document.getElementById('adm-err').style.display   = 'none';
+    document.getElementById('adm-pw').value = '';
+  }
+}
+
+function admLogin() {
+  const pw = document.getElementById('adm-pw').value;
+  if (pw === ADMIN_PASS) {
+    admAuth = true;
+    showAdmPanel();
+  } else {
+    document.getElementById('adm-err').style.display = '';
+    document.getElementById('adm-pw').value = '';
+    document.getElementById('adm-pw').focus();
+  }
+}
+
+function showAdmPanel() {
+  document.getElementById('adm-login').style.display = 'none';
+  document.getElementById('adm-panel').style.display = '';
+  renderAdmList();
+}
+
+function admLogout() {
+  admAuth = false;
+  exitAdmin();
+}
+
+function exitAdmin() {
+  history.replaceState('', '', location.pathname + location.search);
+  go('home');
+}
+
+function renderAdmList() {
+  const games = getGames();
+  const el    = document.getElementById('adm-list');
+  el.innerHTML = '';
+  if (!games.length) {
+    el.innerHTML = '<div class="adm-empty">No hay juegos cargados aún</div>';
+    return;
+  }
+  games.forEach(g => {
+    const row = document.createElement('div');
+    row.className = 'adm-row';
+    row.innerHTML = `
+      ${thumbHTML(g,'adm-thumb')}
+      <div class="adm-info">
+        <div class="adm-gname">${esc(g.name)}</div>
+        <div class="adm-gprice">${esc(g.price)}</div>
+      </div>
+      <div class="adm-acts">
+        <button class="btn-ico btn-edit" title="Editar">✏️</button>
+        <button class="btn-ico btn-del"  title="Eliminar">🗑️</button>
+      </div>`;
+    row.querySelector('.btn-edit').onclick = () => openModal(g.id);
+    row.querySelector('.btn-del').onclick  = () => delGame(g.id);
+    el.appendChild(row);
+  });
+}
+
+/* ── MODAL ────────────────────────────────────────── */
+function openModal(id) {
+  editId = id;
+  document.getElementById('modal-err').style.display = 'none';
+  document.getElementById('modal-h').textContent = id ? 'Editar juego' : 'Agregar juego';
+
+  if (id) {
+    const g = getGames().find(x => x.id === id);
+    if (!g) return;
+    document.getElementById('f-name').value  = g.name        || '';
+    document.getElementById('f-desc').value  = g.description || '';
+    document.getElementById('f-price').value = g.price       || '';
+    document.getElementById('f-age').value   = g.minAge      || '';
+    document.getElementById('f-minp').value  = g.minPlayers  || '';
+    document.getElementById('f-maxp').value  = g.maxPlayers  || '';
+    document.getElementById('f-pace').value  = g.pace        || 'slow';
+    document.getElementById('f-yt').value    = g.youtubeURL  || '';
+    document.getElementById('f-img').value   = g.thumbnail   || '';
+  } else {
+    ['f-name','f-desc','f-price','f-age','f-minp','f-maxp','f-yt','f-img']
+      .forEach(i => document.getElementById(i).value = '');
+    document.getElementById('f-pace').value = 'slow';
+  }
+
+  document.getElementById('game-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('game-modal').classList.remove('open');
+  editId = null;
+}
+
+function modalBgClick(e) {
+  if (e.target === document.getElementById('game-modal')) closeModal();
+}
+
+function saveGame() {
+  const name    = document.getElementById('f-name').value.trim();
+  const price   = document.getElementById('f-price').value.trim();
+  const minAge  = parseInt(document.getElementById('f-age').value);
+  const minP    = parseInt(document.getElementById('f-minp').value);
+  const maxP    = parseInt(document.getElementById('f-maxp').value);
+  const errEl   = document.getElementById('modal-err');
+
+  const fail = msg => { errEl.textContent = msg; errEl.style.display = ''; };
+
+  if (!name)           return fail('El nombre es obligatorio');
+  if (!price)          return fail('El precio es obligatorio');
+  if (isNaN(minAge))   return fail('La edad mínima es obligatoria');
+  if (isNaN(minP)||isNaN(maxP)) return fail('Los jugadores son obligatorios');
+  if (minP > maxP)     return fail('Los jugadores mínimos no pueden superar los máximos');
+
+  const data = {
+    id:          editId || ('g' + Date.now()),
+    name,
+    description: document.getElementById('f-desc').value.trim(),
+    price,
+    minAge,
+    minPlayers:  minP,
+    maxPlayers:  maxP,
+    pace:        document.getElementById('f-pace').value,
+    youtubeURL:  document.getElementById('f-yt').value.trim(),
+    thumbnail:   document.getElementById('f-img').value.trim()
+  };
+
+  const games = getGames();
+  if (editId) {
+    const i = games.findIndex(x => x.id === editId);
+    if (i !== -1) games[i] = data; else games.push(data);
+  } else {
+    games.push(data);
+  }
+  setGames(games);
+  closeModal();
+  renderAdmList();
+  toast(editId ? '✅ Juego actualizado' : '✅ Juego agregado');
+}
+
+function delGame(id) {
+  if (!confirm('¿Eliminar este juego del catálogo?')) return;
+  setGames(getGames().filter(x => x.id !== id));
+  renderAdmList();
+  toast('🗑️ Juego eliminado');
+}
+
+/* ── TOAST ────────────────────────────────────────── */
+let toastTmr;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ── INIT ─────────────────────────────────────────── */
+(function init() {
+  // Seed default data if first run
+  getGames();
+
+  // Hash-based entry
+  function checkHash() {
+    if (location.hash === '#admin-panel-access') {
+      go('admin');
+    } else if (!curView || curView === '') {
+      go('home');
+    }
+  }
+
+  window.addEventListener('hashchange', checkHash);
+  checkHash();
+})();
+</script>
+</body>
+</html>
