@@ -2,7 +2,7 @@
  * views/admin.js — Panel de administración
  * Responsabilidad: autenticación, CRUD de juegos en el catálogo,
  * gestión del modal de alta/edición.
- * Accesible únicamente desde: tudominio.com/#admin-panel-access
+ * Accesible únicamente desde: tudominio.com/#admin
  */
 
 'use strict';

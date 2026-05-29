@@ -96,7 +96,7 @@
   }
 
   function _checkHash() {
-    if (location.hash === '#admin-panel-access') {
+    if (location.hash === '#admin') {
       App.Router.go('admin');
     } else if (!App.Router.current()) {
       // Primera carga: los datos ya están en caché gracias a init()
