@@ -95,20 +95,25 @@ App.Views.admin = (function () {
     }
 
     games.forEach(function (game) {
+      var publishable = App.Data.isPublishable(game);
       var row = document.createElement('div');
-      row.className = 'adm-row';
+      row.className = 'adm-row' + (publishable ? '' : ' adm-row-draft');
+
+      var warningHTML = publishable ? '' : (
+        '<div class="adm-draft-tag" title="' + App.Utils.esc(_publishWarning(game)) + '">⚠️ Incompleto</div>'
+      );
 
       row.innerHTML =
         App.Utils.thumbHTML(game, 'adm-thumb') +
         '<div class="adm-info">' +
-          '<div class="adm-gname">' + App.Utils.esc(game.name) + '</div>' +
+          '<div class="adm-gname">' + App.Utils.esc(game.name || '(sin nombre)') + '</div>' +
+          warningHTML +
         '</div>' +
         '<div class="adm-acts">' +
           '<button class="btn-ico btn-edit" aria-label="Editar '   + App.Utils.esc(game.name) + '">✏️</button>' +
           '<button class="btn-ico btn-del"  aria-label="Eliminar ' + App.Utils.esc(game.name) + '">🗑️</button>' +
         '</div>';
 
-      // Bindear eventos directamente en el elemento para evitar closures problemáticas
       var id = game.id;
       row.querySelector('.btn-edit').onclick = function () { openModal(id); };
       row.querySelector('.btn-del').onclick  = function () { _deleteGame(id); };
@@ -246,6 +251,28 @@ App.Views.admin = (function () {
     var errEl = $('modal-err');
     errEl.textContent = message;
     errEl.hidden = false;
+  }
+
+  /* ── Diagnóstico de juego incompleto ───────────── */
+
+  function _publishWarning(game) {
+    var reasons = [];
+    if (!game.name || !game.name.trim())
+      reasons.push('Falta el nombre');
+    if (!game.youtubeURL) {
+      reasons.push('Falta el video de YouTube');
+    } else {
+      var yt = game.youtubeURL.toLowerCase();
+      if (!yt.includes('youtube.com/') && !yt.includes('youtu.be/'))
+        reasons.push('URL de YouTube inválida');
+    }
+    if (!game.minPlayers || !game.maxPlayers || game.minPlayers > game.maxPlayers)
+      reasons.push('Jugadores inválidos');
+    if ([3, 5, 7, 10, 15].indexOf(game.minAge) === -1)
+      reasons.push('Edad mínima inválida');
+    if (game.pace !== 'slow' && game.pace !== 'fast')
+      reasons.push('Ritmo inválido');
+    return reasons.length ? reasons.join(' · ') : '';
   }
 
   /* ── Vaciar catálogo ────────────────────────────── */

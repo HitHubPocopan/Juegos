@@ -149,7 +149,7 @@ App.Views.advisor = (function () {
   /* ── Filtrar y mostrar recomendaciones ──────────── */
 
   function _showRecommendations() {
-    var games   = App.Data.getGames();
+    var games   = App.Data.getPublishableGames();
     var players = _answers.players;
     var minAge  = parseInt(_answers.age, 10) || 0;
     var pace    = _answers.pace;

@@ -695,6 +695,20 @@ button, input, select, textarea {
   text-overflow: ellipsis;
 }
 
+.adm-row-draft { background: #fffbf2; }
+
+.adm-draft-tag {
+  display: inline-block;
+  font-size: 11px;
+  color: #e65100;
+  background: #fff3e0;
+  border: 1px solid #ffcc80;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-top: 3px;
+  cursor: default;
+}
+
 .adm-acts { display: flex; gap: 8px; flex-shrink: 0; }
 
 .btn-ico {

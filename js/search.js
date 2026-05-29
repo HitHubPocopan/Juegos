@@ -121,7 +121,7 @@ App.Search = (function () {
    * @returns {Array<Object>}
    */
   function searchGames(query) {
-    const games = App.Data.getGames();
+    const games = App.Data.getPublishableGames();
 
     if (!query.trim()) return games;
 

@@ -27,7 +27,7 @@ App.Views.search = (function () {
     const input = document.getElementById(INPUT_ID);
     if (input) input.value = '';
 
-    _renderResults(App.Data.getGames(), '');
+    _renderResults(App.Data.getPublishableGames(), '');
 
     // Enfocar teclado tras la animación de entrada
     setTimeout(function () {

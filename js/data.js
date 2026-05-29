@@ -164,6 +164,35 @@ App.Data = (function () {
     return _cache || [];
   }
 
+  var VALID_AGES_PUB = [3, 5, 7, 10, 15];
+
+  /**
+   * Devuelve true si el juego tiene todos los datos mínimos para
+   * mostrarse a los clientes: nombre, URL de YouTube válida,
+   * jugadores y edad correctos, ritmo definido.
+   * @param {Object} game
+   * @returns {boolean}
+   */
+  function isPublishable(game) {
+    if (!game.name || !game.name.trim()) return false;
+    if (!game.youtubeURL) return false;
+    var yt = game.youtubeURL.toLowerCase();
+    if (!yt.includes('youtube.com/') && !yt.includes('youtu.be/')) return false;
+    if (!game.minPlayers || !game.maxPlayers) return false;
+    if (game.minPlayers > game.maxPlayers) return false;
+    if (VALID_AGES_PUB.indexOf(game.minAge) === -1) return false;
+    if (game.pace !== 'slow' && game.pace !== 'fast') return false;
+    return true;
+  }
+
+  /**
+   * Devuelve solo los juegos listos para mostrarse a los clientes.
+   * @returns {Array}
+   */
+  function getPublishableGames() {
+    return (_cache || []).filter(isPublishable);
+  }
+
   /* ── Escritura (async) ───────────────────────────── */
 
   /**
@@ -268,6 +297,6 @@ App.Data = (function () {
 
   /* ── API pública ────────────────────────────────── */
 
-  return { init, getGames, addGame, updateGame, deleteGame, deleteAllGames, ADMIN_PASS };
+  return { init, getGames, getPublishableGames, isPublishable, addGame, updateGame, deleteGame, deleteAllGames, ADMIN_PASS };
 
 }());
